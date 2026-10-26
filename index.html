@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory Organization | Interactive Learning</title>
+<style>
+:root{--bg:#071225;--panel:#101f39;--panel2:#142847;--text:#edf5ff;--muted:#b6c8e5;--cyan:#62ddff;--blue:#5591ff;--green:#52e0b4;--gold:#ffd166;--pink:#ff8ca8}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at top,#132e54 0,#071225 48%,#050b17 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;line-height:1.6}
+header{padding:52px 20px 36px;text-align:center;background:linear-gradient(130deg,#0c2446aa,#07122533)}.eyebrow{color:var(--cyan);text-transform:uppercase;letter-spacing:.18em;font-size:.78rem;font-weight:800}.hero-title{font-size:clamp(2rem,6vw,4rem);line-height:1.08;margin:12px auto;max-width:900px}.hero-title span{color:var(--cyan)}.lead{max-width:760px;margin:0 auto;color:var(--muted);font-size:1.05rem}.chips{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:22px}.chip{border:1px solid #31527a;border-radius:99px;padding:5px 12px;color:#d7eaff;font-size:.85rem}
+nav{position:sticky;top:0;z-index:10;background:#071225eF;backdrop-filter:blur(12px);border-block:1px solid #203959;display:flex;gap:8px;overflow-x:auto;padding:10px max(16px,calc((100% - 1100px)/2))}nav a{white-space:nowrap;text-decoration:none;color:var(--muted);padding:7px 12px;border-radius:8px;font-size:.9rem}nav a:hover{background:#193657;color:white}
+main{max-width:1100px;margin:auto;padding:24px 18px 70px}.section{margin:38px 0;scroll-margin-top:80px}.section-head{margin-bottom:18px}.section-head h2{font-size:clamp(1.5rem,4vw,2.2rem);margin:0 0 5px}.section-head p{color:var(--muted);margin:0}.panel{background:linear-gradient(145deg,#122542,#0b1930);border:1px solid #294465;border-radius:20px;padding:22px;box-shadow:0 16px 42px #0002}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.memory-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr);gap:18px;align-items:stretch}
+.pyramid{display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 0}.level{border:1px solid #ffffff66;color:#071225;font-weight:850;min-height:43px;display:flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;clip-path:polygon(8% 0,92% 0,100% 100%,0 100%);transition:transform .25s,filter .25s;filter:saturate(.88);padding:7px 20px}.level:hover,.level.active{transform:scale(1.035);filter:brightness(1.2);outline:2px solid #fff;outline-offset:2px}.level small{display:block;font-size:.72rem;font-weight:650}.l0{width:25%;background:#77d7ff}.l1{width:40%;background:#66e2bd}.l2{width:55%;background:#ffe082}.l3{width:70%;background:#ffad70}.l4{width:85%;background:#c5a4ff}.l5{width:100%;background:#7c9fff}.hint{font-size:.86rem;color:var(--muted);text-align:center;margin:4px 0}
+.detail h3{margin:0 0 8px;font-size:1.45rem}.detail p{color:var(--muted)}.device{height:180px;border-radius:14px;background:radial-gradient(circle at 50% 30%,#1d4975,#09172c 72%);border:1px solid #345678;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:15px 0}.device svg{width:92%;height:90%;max-height:170px}.detail ul{padding-left:20px;color:var(--muted)}.metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px}.metric{background:#09172b;border-radius:10px;padding:10px;text-align:center}.metric strong{display:block;color:var(--cyan);font-size:1rem}.metric span{font-size:.76rem;color:var(--muted)}
+button,.btn{border:0;border-radius:10px;background:var(--cyan);color:#041222;padding:10px 15px;font-weight:800;cursor:pointer;font:inherit;font-size:.9rem}button:hover,.btn:hover{filter:brightness(1.08)}button.secondary{background:#1a3455;color:var(--text);border:1px solid #345679}.controls{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.flow{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0}.flowbox{background:#142d4b;border:1px solid #3b5c80;border-radius:12px;padding:12px 14px;text-align:center;min-width:100px}.arrow{color:var(--cyan);font-size:1.4rem}.pulse{width:10px;height:10px;background:var(--cyan);border-radius:50%;display:inline-block;box-shadow:0 0 12px var(--cyan);animation:pulse 1.4s infinite}@keyframes pulse{50%{opacity:.2;transform:scale(.65)}}.moving{animation:move 2.4s linear infinite}@keyframes move{0%{transform:translateX(-20px);opacity:.1}20%{opacity:1}80%{opacity:1}100%{transform:translateX(20px);opacity:.1}}
+.card-icon{font-size:1.8rem}.mini-card h3{margin:6px 0}.mini-card p{margin:0;color:var(--muted);font-size:.95rem}.mini-card{min-height:150px}
+.compare{width:100%;border-collapse:collapse;margin-top:12px}.compare th,.compare td{text-align:left;padding:11px 10px;border-bottom:1px solid #294465}.compare th{color:var(--cyan);font-size:.88rem}.compare td{color:var(--muted)}.compare tr:last-child td{border-bottom:0}
+.example{border-left:4px solid var(--green);padding:12px 16px;background:#0a1b2c;border-radius:0 12px 12px 0;margin:14px 0}.example strong{color:var(--green)}
+.quiz-q{font-weight:800;font-size:1.05rem;margin-bottom:12px}.options{display:grid;gap:8px}.option{display:block;text-align:left;width:100%;background:#0a1930;border:1px solid #315174;color:var(--text);border-radius:10px;padding:11px 13px}.option.selected{border-color:var(--cyan);background:#12304b}.feedback{min-height:26px;color:var(--green);margin-top:10px;font-weight:700}.refs a{color:var(--cyan);overflow-wrap:anywhere}.refs li{margin:9px 0;color:var(--muted)}
+footer{text-align:center;padding:24px;color:#8fa7c8;border-top:1px solid #203959;font-size:.9rem}
+@media(max-width:760px){.grid,.three,.memory-layout{grid-template-columns:1fr}.panel{padding:17px}.level{min-height:46px;font-size:.82rem}.detail{min-height:unset}.metric-row{grid-template-columns:repeat(3,1fr)}.compare{font-size:.85rem}.compare th,.compare td{padding:8px 5px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Interactive Computer Organisation Lesson</div>
+  <h1 class="hero-title">Memory <span>Organization</span></h1>
+  <p class="lead">Explore how a computer stores data, moves it to the CPU, and balances speed, capacity, and cost.</p>
+  <div class="chips"><span class="chip">6 hierarchy levels</span><span class="chip">Clickable 3D-inspired diagram</span><span class="chip">Examples + quiz</span></div>
+</header>
+<nav aria-label="Main navigation"><a href="#overview">Overview</a><a href="#hierarchy">Hierarchy explorer</a><a href="#dataflow">Data flow</a><a href="#types">Memory types</a><a href="#examples">Examples</a><a href="#applications">Applications</a><a href="#quiz">Quick quiz</a><a href="#references">References</a></nav>
+<main>
+<section class="section" id="overview">
+  <div class="section-head"><h2>01 · What is memory organization?</h2><p>The way a computer arranges, accesses, and manages storage so instructions and data are available when needed.</p></div>
+  <div class="grid three">
+    <article class="panel mini-card"><div class="card-icon">⚡</div><h3>Speed</h3><p>Registers and cache are close to the CPU and provide very fast access.</p></article>
+    <article class="panel mini-card"><div class="card-icon">🗄️</div><h3>Capacity</h3><p>Secondary storage holds much more data, usually for long-term use.</p></article>
+    <article class="panel mini-card"><div class="card-icon">🔁</div><h3>Data movement</h3><p>Frequently used data is brought closer to the CPU when possible.</p></article>
+  </div>
+</section>
+
+<section class="section" id="hierarchy">
+ <div class="section-head"><h2>02 · Explore the memory hierarchy</h2><p>Select a layer to open its details. The pyramid is ordered from Level 0 (fastest) to Level 5 (long-term storage).</p></div>
+ <div class="memory-layout">
+  <div class="panel">
+   <div class="pyramid" role="group" aria-label="Clickable memory hierarchy pyramid">
+    <button class="level l0 active" data-level="0">LEVEL 0<small>CPU Registers</small></button>
+    <button class="level l1" data-level="1">LEVEL 1<small>Cache · SRAM</small></button>
+    <button class="level l2" data-level="2">LEVEL 2<small>Main Memory · DRAM</small></button>
+    <button class="level l3" data-level="3">LEVEL 3<small>Magnetic Disk</small></button>
+    <button class="level l4" data-level="4">LEVEL 4<small>Optical Disk</small></button>
+    <button class="level l5" data-level="5">LEVEL 5<small>Magnetic Tape</small></button>
+   </div>
+   <p class="hint">↑ Top: faster access, smaller capacity · Bottom: larger capacity, slower access ↓</p>
+  </div>
+  <article class="panel detail" aria-live="polite">
+    <div class="eyebrow" id="detail-kicker">LEVEL 0 · CLOSEST TO CPU</div>
+    <h3 id="detail-title">CPU Registers</h3>
+    <p id="detail-desc">Tiny storage locations inside the processor that hold the values and addresses currently being used by instructions.</p>
+    <div class="device" id="device-art" aria-label="Illustration of the selected memory device">
+      <svg viewBox="0 0 320 170" role="img" aria-label="CPU registers illustration"><rect x="48" y="30" width="224" height="110" rx="12" fill="#173d62" stroke="#62ddff" stroke-width="3"/><rect x="65" y="46" width="190" height="77" rx="7" fill="#09182d" stroke="#62ddff"/><g fill="#62ddff" font-size="13" font-weight="bold" text-anchor="middle"><rect x="78" y="58" width="48" height="23" rx="3" fill="#1d5d83"/><rect x="136" y="58" width="48" height="23" rx="3" fill="#1d5d83"/><rect x="194" y="58" width="48" height="23" rx="3" fill="#1d5d83"/><text x="102" y="74">R0</text><text x="160" y="74">R1</text><text x="218" y="74">R2</text><text x="160" y="105">REGISTER BANK</text></g><path d="M30 50h18M30 75h18M30 100h18M272 50h18M272 75h18M272 100h18" stroke="#62ddff" stroke-width="3"/></svg>
+    </div>
+    <p id="detail-purpose">Purpose: keep immediate operands, addresses, and intermediate results ready for the CPU.</p>
+    <ul id="detail-points"><li>Fastest level in this simplified hierarchy.</li><li>Very small capacity.</li><li>Volatile: contents normally disappear when power is off.</li></ul>
+    <div class="metric-row"><div class="metric"><strong id="metric-speed">Fastest</strong><span>Access speed</span></div><div class="metric"><strong id="metric-cap">Tiny</strong><span>Capacity</span></div><div class="metric"><strong id="metric-use">CPU</strong><span>Main use</span></div></div>
+  </article>
+ </div>
+</section>
+
+<section class="section" id="dataflow">
+ <div class="section-head"><h2>03 · See how data moves</h2><p>When the CPU needs information, the system checks closer, faster memory first. Try the animated example.</p></div>
+ <div class="panel">
+  <div class="flow">
+   <div class="flowbox">CPU<br><small>requests data</small></div><span class="arrow">→</span>
+   <div class="flowbox">Registers<br><small>Level 0</small></div><span class="arrow">→</span>
+   <div class="flowbox">Cache<br><small>Level 1</small></div><span class="arrow">→</span>
+   <div class="flowbox">Main memory<br><small>Level 2</small></div><span class="arrow">→</span>
+   <div class="flowbox">Storage<br><small>Levels 3–5</small></div>
+  </div>
+  <p id="flow-status" style="text-align:center;color:var(--muted)">Press “Simulate a request” to follow a simplified data lookup.</p>
+  <div class="controls" style="justify-content:center"><button id="simulate">▶ Simulate a request</button><button class="secondary" id="reset-flow">Reset</button></div>
+ </div>
+</section>
+
+<section class="section" id="types">
+ <div class="section-head"><h2>04 · Primary vs secondary memory</h2><p>Different memory technologies serve different needs.</p></div>
+ <div class="grid">
+  <article class="panel"><h3>Primary memory</h3><p style="color:var(--muted)">Directly involved in active processing.</p><table class="compare"><tr><th>Type</th><th>Key feature</th></tr><tr><td>Registers</td><td>Inside CPU; extremely fast</td></tr><tr><td>Cache (SRAM)</td><td>Fast; no refresh needed</td></tr><tr><td>RAM (DRAM)</td><td>Main working memory; requires refresh</td></tr><tr><td>ROM / Flash</td><td>Non-volatile; stores firmware</td></tr></table></article>
+  <article class="panel"><h3>Secondary storage</h3><p style="color:var(--muted)">Keeps files and programs when power is off.</p><table class="compare"><tr><th>Type</th><th>Key feature</th></tr><tr><td>Magnetic disk (HDD)</td><td>Rotating platters; rewritable</td></tr><tr><td>Solid-state drive (SSD)</td><td>Flash storage; no moving parts</td></tr><tr><td>Optical disk</td><td>Laser reads/writes disc data</td></tr><tr><td>Magnetic tape</td><td>High-capacity backup and archive</td></tr></table></article>
+ </div>
+ <div class="example"><strong>Remember:</strong> SRAM is commonly used for cache; DRAM is commonly used for main memory. The hierarchy is a teaching model—real systems can include additional cache levels and SSD storage.</div>
+</section>
+
+<section class="section" id="examples">
+ <div class="section-head"><h2>05 · Everyday example</h2><p>Imagine opening a photo-editing app.</p></div>
+ <div class="panel">
+  <div class="grid">
+   <div><h3>What happens?</h3><ol style="color:var(--muted);padding-left:22px"><li>The app and photo are stored on an SSD or HDD.</li><li>When opened, needed data is loaded into DRAM.</li><li>Frequently reused data may be copied into CPU cache.</li><li>The CPU works on current values in registers.</li><li>When you save, the edited file is written back to storage.</li></ol></div>
+   <div><h3>Try the memory match</h3><p style="color:var(--muted)">Which memory is most likely to hold the current operand the CPU is processing?</p><div class="controls"><button class="secondary match" data-answer="wrong">Magnetic tape</button><button class="secondary match" data-answer="correct">CPU register</button><button class="secondary match" data-answer="wrong">Optical disc</button></div><p id="match-feedback" class="feedback" aria-live="polite"></p></div>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="applications">
+ <div class="section-head"><h2>06 · Applications</h2><p>Memory organization is important wherever performance and data retention matter.</p></div>
+ <div class="grid three">
+  <article class="panel mini-card"><div class="card-icon">💻</div><h3>Personal computers</h3><p>Cache and RAM help applications respond quickly; SSDs store files and software.</p></article>
+  <article class="panel mini-card"><div class="card-icon">☁️</div><h3>Data centres</h3><p>Memory hierarchy balances server speed, cost, and large-scale storage needs.</p></article>
+  <article class="panel mini-card"><div class="card-icon">🧠</div><h3>Embedded systems</h3><p>Registers, SRAM, DRAM, and Flash are selected for timing, power, and reliability.</p></article>
+  <article class="panel mini-card"><div class="card-icon">🎮</div><h3>Gaming and graphics</h3><p>Fast memory supplies the CPU and GPU with frequently needed data and textures.</p></article>
+  <article class="panel mini-card"><div class="card-icon">🗃️</div><h3>Backup and archiving</h3><p>Magnetic tape can keep large amounts of data for long-term retention.</p></article>
+  <article class="panel mini-card"><div class="card-icon">📱</div><h3>Mobile devices</h3><p>RAM supports active apps, while non-volatile flash stores apps, photos, and files.</p></article>
+ </div>
+</section>
+
+<section class="section" id="quiz">
+ <div class="section-head"><h2>07 · Quick knowledge check</h2><p>Choose an answer, then check your understanding.</p></div>
+ <div class="panel">
+  <div class="quiz-q" id="quiz-question">1. Which memory is typically used to build CPU cache?</div>
+  <div class="options" id="quiz-options"><button class="option" data-i="0">DRAM</button><button class="option" data-i="1">SRAM</button><button class="option" data-i="2">Magnetic tape</button></div>
+  <div class="controls"><button id="check-answer">Check answer</button><button class="secondary" id="next-question">Next question →</button></div>
+  <p class="feedback" id="quiz-feedback" aria-live="polite"></p><p style="color:var(--muted);font-size:.9rem" id="quiz-score">Question 1 of 5</p>
+ </div>
+</section>
+
+<section class="section refs" id="references">
+ <div class="section-head"><h2>08 · References</h2><p>Use these resources to read further. Links open the original source.</p></div>
+ <div class="panel"><ol>
+  <li><a href="https://www.cs.cornell.edu/courses/cs3410/2019sp/" target="_blank" rel="noopener">Cornell University — Computer Systems course materials</a> (processor and memory concepts).</li>
+  <li><a href="https://www.nand2tetris.org/" target="_blank" rel="noopener">Nand2Tetris</a> (how computer components fit together).</li>
+  <li><a href="https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html" target="_blank" rel="noopener">Intel® 64 and IA-32 Architectures Software Developer Manuals</a> (processor architecture and registers).</li>
+  <li><a href="https://www.ibm.com/docs/en" target="_blank" rel="noopener">IBM Documentation</a> (storage and system concepts).</li>
+ </ol><p style="color:var(--muted);font-size:.88rem">Educational summary. Specific memory speeds and capacities depend on the computer and technology generation.</p></div>
+</section>
+</main>
+<footer>Memory Organization · Interactive learning webpage · Built for Computer Organisation</footer>
+<script>
+const memory = [
+ {title:"CPU Registers",kicker:"LEVEL 0 · CLOSEST TO CPU",desc:"Tiny storage locations inside the processor that hold the values and addresses currently being used by instructions.",purpose:"Purpose: keep immediate operands, addresses, and intermediate results ready for the CPU.",points:["Fastest level in this simplified hierarchy.","Very small capacity.","Volatile: contents normally disappear when power is off."],speed:"Fastest",cap:"Tiny",use:"CPU",color:"#62ddff",art:`<svg viewBox="0 0 320 170" role="img" aria-label="CPU register bank"><rect x="48" y="30" width="224" height="110" rx="12" fill="#173d62" stroke="#62ddff" stroke-width="3"/><rect x="65" y="46" width="190" height="77" rx="7" fill="#09182d" stroke="#62ddff"/><g fill="#62ddff" font-size="13" font-weight="bold" text-anchor="middle"><rect x="78" y="58" width="48" height="23" rx="3" fill="#1d5d83"/><rect x="136" y="58" width="48" height="23" rx="3" fill="#1d5d83"/><rect x="194" y="58" width="48" height="23" rx="3" fill="#1d5d83"/><text x="102" y="74">R0</text><text x="160" y="74">R1</text><text x="218" y="74">R2</text><text x="160" y="105">REGISTER BANK</text></g><path d="M30 50h18M30 75h18M30 100h18M272 50h18M272 75h18M272 100h18" stroke="#62ddff" stroke-width="3"/></svg>`},
+ {title:"Cache Memory (SRAM)",kicker:"LEVEL 1 · VERY FAST",desc:"Cache stores copies of data and instructions that the CPU is likely to use again soon.",purpose:"Purpose: reduce average memory-access time by keeping frequently used information near the CPU.",points:["Usually built using SRAM.","Faster and smaller than main memory.","Cache hits are faster than fetching from RAM."],speed:"Very fast",cap:"Small",use:"Reuse",color:"#52e0b4",art:`<svg viewBox="0 0 320 170" role="img" aria-label="SRAM cache chip"><g stroke="#52e0b4" stroke-width="2" fill="none">${Array.from({length:8},(_,i)=>`<path d="M${50+i*30} 25v20 M${50+i*30} 125v20"/>`).join("")}</g><rect x="45" y="42" width="230" height="86" rx="8" fill="#153b39" stroke="#52e0b4" stroke-width="3"/><rect x="82" y="56" width="156" height="58" rx="6" fill="#071b25" stroke="#52e0b4" stroke-width="2"/><text x="160" y="82" fill="#52e0b4" font-size="18" text-anchor="middle" font-weight="bold">SRAM</text><text x="160" y="101" fill="#c9fff0" font-size="10" text-anchor="middle">CACHE CHIP</text></svg>`},
+ {title:"Main Memory (DRAM)",kicker:"LEVEL 2 · WORKING MEMORY",desc:"Main memory holds programs and data currently in use so the CPU can access them.",purpose:"Purpose: provide the computer's active workspace for running applications.",points:["Commonly built from DRAM.","Larger than cache but slower.","DRAM cells require periodic refreshing; typical system RAM is volatile."],speed:"Fast",cap:"Medium–large",use:"Active apps",color:"#ffd166",art:`<svg viewBox="0 0 320 170" role="img" aria-label="DRAM memory module"><rect x="20" y="34" width="280" height="104" rx="5" fill="#1e573f" stroke="#ffd166" stroke-width="2"/><path d="M25 120h270" stroke="#d8b65b" stroke-width="3"/>${Array.from({length:8},(_,i)=>`<rect x="${35+i*32}" y="48" width="25" height="55" rx="3" fill="#14202c" stroke="#ffd166"/><path d="M${42+i*32} 58h11M${42+i*32} 68h11M${42+i*32} 78h11" stroke="#8ca6b8"/>`).join("")}<text x="160" y="158" fill="#ffd166" font-size="12" text-anchor="middle">DRAM MODULE</text></svg>`},
+ {title:"Magnetic Disk (HDD)",kicker:"LEVEL 3 · SECONDARY STORAGE",desc:"A hard disk drive stores data magnetically on spinning platters.",purpose:"Purpose: retain operating systems, applications, and files even when the computer is turned off.",points:["Non-volatile storage.","Mechanical movement affects access time.","Rewritable and suitable for large file collections."],speed:"Slower",cap:"Large",use:"Files",color:"#ffad70",art:`<svg viewBox="0 0 320 170" role="img" aria-label="Hard disk drive"><rect x="35" y="25" width="250" height="120" rx="12" fill="#263547" stroke="#ffad70" stroke-width="2"/><circle cx="143" cy="83" r="48" fill="#7b8b9d" stroke="#e8f1ff" stroke-width="3"/><circle cx="143" cy="83" r="36" fill="#aab8c8" stroke="#51677e" stroke-width="2"/><circle cx="143" cy="83" r="8" fill="#172638" stroke="#fff"/><path d="M235 54L167 78l-9 11 15 9 62-30" fill="#d0d9e4" stroke="#ffad70" stroke-width="3"/><circle cx="240" cy="50" r="7" fill="#ffad70"/></svg>`},
+ {title:"Optical Disk",kicker:"LEVEL 4 · REMOVABLE MEDIA",desc:"Optical discs such as CDs and DVDs use a laser to read encoded information from a disc surface.",purpose:"Purpose: distribute media or software and keep removable copies of data.",points:["Non-volatile removable storage.","Read/write capability depends on disc type.","Generally slower and lower-capacity than modern SSDs."],speed:"Slow",cap:"Medium",use:"Media",color:"#c5a4ff",art:`<svg viewBox="0 0 320 170" role="img" aria-label="Optical disc"><defs><linearGradient id="disc" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#73eaff"/><stop offset=".35" stop-color="#bba2ff"/><stop offset=".6" stop-color="#ff9eaa"/><stop offset="1" stop-color="#f9e88a"/></linearGradient></defs><ellipse cx="160" cy="92" rx="83" ry="60" fill="url(#disc)" stroke="#e9f4ff" stroke-width="3"/><ellipse cx="160" cy="92" rx="24" ry="17" fill="#0c1b31" stroke="#e9f4ff" stroke-width="3"/><ellipse cx="160" cy="92" rx="65" ry="46" fill="none" stroke="#fff" stroke-opacity=".65"/><path d="M160 92L230 48" stroke="#fff" stroke-width="2" stroke-opacity=".7"/></svg>`},
+ {title:"Magnetic Tape",kicker:"LEVEL 5 · ARCHIVE STORAGE",desc:"Magnetic tape stores data on a long magnetic strip wound onto reels or contained in a cartridge.",purpose:"Purpose: backups, archival storage, and keeping very large amounts of data for long periods.",points:["Non-volatile storage.","Sequential access is common, so locating a particular item can take longer.","High capacity and low cost per stored bit for archives."],speed:"Slowest",cap:"Very large",use:"Backup",color:"#7c9fff",art:`<svg viewBox="0 0 320 170" role="img" aria-label="Magnetic tape reels"><rect x="32" y="30" width="256" height="112" rx="12" fill="#162b4b" stroke="#7c9fff" stroke-width="2"/><circle cx="100" cy="77" r="37" fill="#a6b9d6" stroke="#eaf2ff" stroke-width="3"/><circle cx="100" cy="77" r="25" fill="#263f63" stroke="#7c9fff" stroke-width="3"/><circle cx="100" cy="77" r="7" fill="#eaf2ff"/><circle cx="220" cy="77" r="37" fill="#a6b9d6" stroke="#eaf2ff" stroke-width="3"/><circle cx="220" cy="77" r="25" fill="#263f63" stroke="#7c9fff" stroke-width="3"/><circle cx="220" cy="77" r="7" fill="#eaf2ff"/><path d="M100 114 Q155 140 220 114" fill="none" stroke="#7c9fff" stroke-width="8"/><path d="M100 114 Q155 140 220 114" fill="none" stroke="#dce7ff" stroke-width="2"/></svg>`}
+];
+const levels=[...document.querySelectorAll(".level")];
+function showLevel(i){const d=memory[i];levels.forEach((b,j)=>b.classList.toggle("active",j===i));document.getElementById("detail-kicker").textContent=d.kicker;document.getElementById("detail-title").textContent=d.title;document.getElementById("detail-desc").textContent=d.desc;document.getElementById("detail-purpose").textContent=d.purpose;document.getElementById("detail-points").innerHTML=d.points.map(p=>`<li>${p}</li>`).join("");document.getElementById("metric-speed").textContent=d.speed;document.getElementById("metric-cap").textContent=d.cap;document.getElementById("metric-use").textContent=d.use;document.getElementById("device-art").innerHTML=d.art;document.getElementById("device-art").style.borderColor=d.color;}
+levels.forEach(b=>b.addEventListener("click",()=>showLevel(Number(b.dataset.level))));
+const flowSteps=["CPU requests a value.","Registers hold values currently being processed.","Cache is checked for a copy of the requested data.","If needed, the system fetches data from main memory.","If data is not available there, it may need to be read from secondary storage; this is much slower."];
+let flowIndex=0,flowTimer=null;
+document.getElementById("simulate").addEventListener("click",()=>{clearInterval(flowTimer);flowIndex=0;const status=document.getElementById("flow-status");status.textContent=flowSteps[flowIndex];flowTimer=setInterval(()=>{flowIndex++;if(flowIndex>=flowSteps.length){clearInterval(flowTimer);status.textContent="Request complete. Real systems use more detailed pathways, caches, and operating-system buffering.";return;}status.innerHTML=`<span class="pulse"></span> ${flowSteps[flowIndex]}`;},1500);});
+document.getElementById("reset-flow").addEventListener("click",()=>{clearInterval(flowTimer);document.getElementById("flow-status").textContent="Press “Simulate a request” to follow a simplified data lookup.";});
+document.querySelectorAll(".match").forEach(b=>b.addEventListener("click",()=>{const f=document.getElementById("match-feedback");f.textContent=b.dataset.answer==="correct"?"Correct! Registers hold the CPU's immediate working values.":"Not quite. Think of the smallest storage location directly inside the CPU.";f.style.color=b.dataset.answer==="correct"?"var(--green)":"var(--gold)";}));
+const quiz=[
+ {q:"1. Which memory is typically used to build CPU cache?",o:["DRAM","SRAM","Magnetic tape"],a:1,e:"SRAM is fast and is commonly used for cache."},
+ {q:"2. Which memory normally holds active programs and data?",o:["Main memory (DRAM)","Optical disk","Magnetic tape"],a:0,e:"DRAM is commonly used as the computer's main working memory."},
+ {q:"3. Which level is closest to the CPU in this hierarchy?",o:["Level 5 — Magnetic tape","Level 2 — Main memory","Level 0 — CPU registers"],a:2,e:"Registers are inside the processor and are the fastest level here."},
+ {q:"4. Which storage is commonly used for long-term backup archives?",o:["CPU registers","Magnetic tape","Cache"],a:1,e:"Magnetic tape is widely used for backup and archival storage."},
+ {q:"5. What is a general trend as we move down the hierarchy?",o:["Capacity decreases and speed rises","Capacity rises and access usually gets slower","Every level has the same speed"],a:1,e:"Lower levels generally provide larger capacity but slower access."}
+];
+let qi=0,chosen=null,score=0,answered=false;
+function renderQuiz(){const q=quiz[qi];document.getElementById("quiz-question").textContent=q.q;document.getElementById("quiz-options").innerHTML=q.o.map((v,i)=>`<button class="option" data-i="${i}">${v}</button>`).join("");document.querySelectorAll(".option").forEach(b=>b.addEventListener("click",()=>{if(answered)return;chosen=Number(b.dataset.i);document.querySelectorAll(".option").forEach(x=>x.classList.toggle("selected",x===b));}));document.getElementById("quiz-feedback").textContent="";document.getElementById("quiz-score").textContent=`Question ${qi+1} of ${quiz.length} · Score: ${score}`;chosen=null;answered=false;}
+document.getElementById("check-answer").addEventListener("click",()=>{if(chosen===null){document.getElementById("quiz-feedback").textContent="Choose an answer first.";return;}if(answered)return;answered=true;const ok=chosen===quiz[qi].a;if(ok)score++;document.getElementById("quiz-feedback").textContent=(ok?"Correct! ":"Not quite. ")+quiz[qi].e;document.getElementById("quiz-feedback").style.color=ok?"var(--green)":"var(--gold)";document.getElementById("quiz-score").textContent=`Question ${qi+1} of ${quiz.length} · Score: ${score}`;});
+document.getElementById("next-question").addEventListener("click",()=>{if(qi<quiz.length-1){qi++;renderQuiz();}else{document.getElementById("quiz-question").textContent=`Quiz complete — you scored ${score} out of ${quiz.length}.`;document.getElementById("quiz-options").innerHTML="";document.getElementById("quiz-feedback").textContent=score>=4?"Great work! Review any level you want to reinforce.":"Good effort! Explore the pyramid and try the quiz again.";document.getElementById("quiz-score").textContent="End of quiz";document.getElementById("next-question").textContent="Restart quiz";document.getElementById("next-question").onclick=()=>{qi=0;score=0;document.getElementById("next-question").textContent="Next question →";renderQuiz();};}});
+renderQuiz();
+</script>
+</body>
+</html>
